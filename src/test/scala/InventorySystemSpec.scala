@@ -1,27 +1,50 @@
 
 import org.scalatest._
 
-class InventorySystemSpec extends FunSuite with Matchers {
+class InventorySystemSpec extends FunSuite with Matchers with BeforeAndAfter with MustMatchers {
 
   val inv = new InventorySystem
-  val ds = Utils.getDataSource
+
 
   test("add new item") {
-    val count = inv.itemCount()
     inv.addNewItem("pen")
-    assert(inv.itemCount() == (count + 1))
+    inv.addNewItem("pencil")
+    inv.itemCount() should be(2)
   }
 
   test("add inventory") {
-    val count = inv.inventoriesCount()
     inv.addInventory("hyd", "hyd")
-    assert(inv.inventoriesCount() == (count + 1))
+    inv.addInventory("blr", "blr")
+    inv.addInventory("hyd1", "hyd")
+    inv.inventoriesCount should be(3)
   }
 
-  test(""){
+  test("add items to inventory") {
+    inv.addItemToInventory("pen", 40, 1)
 
   }
 
+  test("place order and cancel order") {
+    inv.placeOrder("pen", 1, 2)
 
+  }
+
+  test("cancel order") {
+    inv.cancelOrder(1)
+  }
+
+
+  after {
+    val ds = Utils.getDataSource
+    val pstmt = ds.getConnection.prepareStatement("truncate ?")
+    pstmt.setString(1, "inventory_info")
+    pstmt.addBatch()
+    pstmt.setString(1, "items")
+    pstmt.addBatch()
+    pstmt.setString(1, "orders")
+    pstmt.addBatch()
+    pstmt.setString(1, "inventory")
+    pstmt.executeBatch()
+  }
 
 }
