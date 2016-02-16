@@ -1,13 +1,12 @@
 
 class OrderControl extends InventoryControl {
 
-
   def placeOrder(item: String, inventoryId: Int, quantity: Int) = {
     val availableQty = getQuantity(item, inventoryId)
     val newQty = if (availableQty > quantity) availableQty - quantity
     else
       throw new Exception("Insufficient quantity")
-    val addOrderStmt = s"insert into order values (?,?,?)"
+    val addOrderStmt = s"insert into orders values (?,?,?)"
     val pstmt = datasource.getConnection.prepareStatement(addOrderStmt)
     pstmt.setString(1, item)
     pstmt.setInt(2, inventoryId)
@@ -17,7 +16,7 @@ class OrderControl extends InventoryControl {
   }
 
   def getOrderDetails(orderId: Int): Order = {
-    val orderQuery = datasource.getConnection().prepareStatement(s"select * from orders where order=?")
+    val orderQuery = datasource.getConnection.prepareStatement(s"select * from orders where order_id=?")
     orderQuery.setInt(1, orderId)
     val orderDetails = orderQuery.executeQuery()
 
@@ -25,13 +24,13 @@ class OrderControl extends InventoryControl {
     val qty = orderDetails.getInt("qty")
     val itemName = orderDetails.getString("item")
     val inventory_id = orderDetails.getInt("inventory_id")
-    
+
     new Order(orderId, itemName, qty, inventory_id)
   }
 
   def cancelOrder(orderId: Int) = {
     val orderDetails = getOrderDetails(orderId)
-    val cancelOrderQuery = datasource.getConnection.prepareStatement(s"delete from orders where orderid=?")
+    val cancelOrderQuery = datasource.getConnection.prepareStatement(s"delete from orders where order_id=?")
     cancelOrderQuery.setInt(1, orderId)
     val qty = getQuantity(orderDetails.item, orderDetails.inventoryId)
     updateQuantity(orderDetails.item, qty + orderDetails.qty, orderDetails.inventoryId)

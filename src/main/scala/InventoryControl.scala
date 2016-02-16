@@ -2,7 +2,7 @@
 trait InventoryControl {
   protected val datasource = Utils.getDataSource
 
-  def addNewItem(item: String, quantity: Int, inventoryId: Int) = {
+  def addItemToInventory(item: String, quantity: Int, inventoryId: Int) = {
     try {
       val stmt = s"insert into inventory values(?,?,?)"
       val pstmt = datasource.getConnection.prepareStatement(stmt)
@@ -11,6 +11,19 @@ trait InventoryControl {
       pstmt.setString(3, item)
       pstmt.execute()
     }
+  }
+
+  def addNewItem(itemName: String) = {
+    val pstmt = datasource.getConnection.prepareStatement("insert into items(item_name) values (?)")
+    pstmt.setString(1, itemName)
+    pstmt.execute()
+  }
+
+  def itemCount(): Int = {
+    val pstsmt = datasource.getConnection.prepareStatement("select count(*) from items")
+    val rs = pstsmt.executeQuery()
+    rs.next()
+    rs.getInt("count(*)")
   }
 
   protected def getQuantity(item: String, inventoryId: Int): Int = {
