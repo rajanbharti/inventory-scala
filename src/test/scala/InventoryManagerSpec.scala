@@ -1,7 +1,7 @@
 
 import org.scalatest._
 
-class InventorySystemSpec extends FunSuite with Matchers with BeforeAndAfter {
+class InventoryManagerSpec extends FunSuite with Matchers with BeforeAndAfterAll {
 
   val inv = new InventorySystem
 
@@ -11,8 +11,8 @@ class InventorySystemSpec extends FunSuite with Matchers with BeforeAndAfter {
     inv.itemCount() should be(2)
   }
 
-  test("inventory count") {
 
+  test("inventory count") {
     inv.addInventory("hyd", "hyd")
     inv.addInventory("blr", "blr")
     inv.addInventory("hyd1", "hyd")
@@ -24,7 +24,7 @@ class InventorySystemSpec extends FunSuite with Matchers with BeforeAndAfter {
     inv.getQuantity("pen", 1) should be(40)
   }
 
-  test("update quantity") {
+  test("add quantity") {
     inv.addQuantity("pen", 20, 1)
     inv.getQuantity("pen", 1) should be(60)
   }
@@ -40,7 +40,8 @@ class InventorySystemSpec extends FunSuite with Matchers with BeforeAndAfter {
     inv.getQuantity("pen", 1) should be(60)
   }
 
-  after {
+
+  override def afterAll = {
     val ds = Utils.getDataSource
     val stm1 = ds.getConnection.createStatement()
     val sql1 = "truncate items"
