@@ -1,5 +1,5 @@
 
-class OrderManager extends InventoryManager {
+trait OrderManager extends InventoryManager {
 
   def placeOrder(item: String, inventoryId: Int, quantity: Int) = {
     val availableQty = getQuantity(item, inventoryId)
