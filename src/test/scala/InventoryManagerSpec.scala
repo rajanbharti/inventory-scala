@@ -5,14 +5,14 @@ class InventoryManagerSpec extends FunSuite with Matchers with BeforeAndAfterAll
 
   val inv = new InventorySystem
 
-  test("item count") {
+  test("add item") {
     inv.addNewItem("pen")
     inv.addNewItem("pencil")
     inv.itemCount() should be(2)
   }
 
 
-  test("inventory count") {
+  test("add inventory") {
     inv.addInventory("hyd", "hyd")
     inv.addInventory("blr", "blr")
     inv.addInventory("hyd1", "hyd")
