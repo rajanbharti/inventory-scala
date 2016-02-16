@@ -1,7 +1,7 @@
 #Inventory Management System
 
 ##Table Structure
-Initialize table structure using tables.sql from src/resources from mysql__
+Initialize table structure using tables.sql from src/resources from mysql_
 command:source <path>/tables.sql
 
 ##MySql configuration
