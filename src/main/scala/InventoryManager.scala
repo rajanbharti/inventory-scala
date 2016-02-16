@@ -5,12 +5,14 @@ trait InventoryManager {
 
   def addItemToInventory(item: String, quantity: Int, inventoryId: Int) = {
     val conn = dataSource.getConnection
-    val pstmt = conn.prepareStatement(s"insert into inventory(inv_id,item,qty) values(?,?,?)")
-    pstmt.setInt(1, inventoryId)
-    pstmt.setString(2, item)
-    pstmt.setInt(3, quantity)
-    pstmt.execute()
-    conn.close()
+    if (getItemList.contains(item)) {
+      val pstmt = conn.prepareStatement(s"insert into inventory(inv_id,item,qty) values(?,?,?)")
+      pstmt.setInt(1, inventoryId)
+      pstmt.setString(2, item)
+      pstmt.setInt(3, quantity)
+      pstmt.execute()
+      conn.close()
+    } else throw new Exception("Add item to itemList, before adding to inventory")
   }
 
   def getQuantity(item: String, inventoryId: Int): Int = {
@@ -39,7 +41,7 @@ trait InventoryManager {
   def addQuantity(item: String, quantity: Int, inventoryId: Int) = {
     val availableQty = getQuantity(item, inventoryId)
     val conn = dataSource.getConnection
-    val pstmt = dataSource.getConnection.prepareStatement(s"update inventory set qty=? where inv_id=? and item=?")
+    val pstmt = conn.prepareStatement(s"update inventory set qty=? where inv_id=? and item=?")
     pstmt.setInt(1, quantity + availableQty)
     pstmt.setInt(2, inventoryId)
     pstmt.setString(3, item)
@@ -67,14 +69,13 @@ trait InventoryManager {
   }
 
 
-  def getItemList: util.ArrayList[String] = {
+  protected def getItemList: util.ArrayList[String] = {
     val conn = dataSource.getConnection
     val stmt = conn.prepareStatement("select item_name from items order by item_name;")
     val rs = stmt.executeQuery()
     val itemList = new util.ArrayList[String]
     while (rs.next()) {
       itemList.add(rs.getString("item_name"))
-
     }
     conn.close()
     itemList
