@@ -1,5 +1,9 @@
 #Inventory Management System
 
+##Dependencies
+sbt<br />
+MySQL
+
 ##Table Structure
 Initialize table structure using tables.sql from src/resources from mysql.<br />
 command:source {path}/tables.sql

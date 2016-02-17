@@ -1,7 +1,9 @@
-import com.typesafe.config.ConfigFactory
-import com.zaxxer.hikari.{HikariDataSource, HikariConfig}
+package inventory.db
 
-object Utils {
+import com.typesafe.config.ConfigFactory
+import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
+
+object DataSourceUtils {
   lazy val config = ConfigFactory.load()
 
   private val driverClass = config.getString("driverClass")

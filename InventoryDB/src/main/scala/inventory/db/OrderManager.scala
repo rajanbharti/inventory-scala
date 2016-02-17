@@ -1,9 +1,15 @@
+package inventory.db
 
-trait OrderManager extends InventoryManager {
+import inventory.core.Order
+
+trait OrderManager {
+  private val dataSource = DataSourceUtils.getDataSource
+
+  def inventoryManager = new InventoryManager
 
   def placeOrder(item: String, inventoryId: Int, quantity: Int) = {
-    val availableQty = getQuantity(item, inventoryId)
-    val itemList = getItemList
+    val availableQty = inventoryManager.getQuantity(item, inventoryId)
+    val itemList = inventoryManager.getItemList
     val newQty = if ((availableQty > quantity) && itemList.contains(item)) availableQty - quantity
     else
       throw new Exception("Insufficient quantity or Item not available")
@@ -14,7 +20,7 @@ trait OrderManager extends InventoryManager {
     pstmt.setInt(3, quantity)
     pstmt.execute
     conn.close()
-    modifyQuantity(item, newQty, inventoryId)
+    inventoryManager.modifyQuantity(item, newQty, inventoryId)
   }
 
   def getOrderDetails(orderId: Int): Order = {
@@ -35,10 +41,8 @@ trait OrderManager extends InventoryManager {
     val conn = dataSource.getConnection
     val cancelOrderQuery = conn.prepareStatement(s"delete from orders where order_id=?")
     cancelOrderQuery.setInt(1, orderId)
-    val qty = getQuantity(orderDetails.item, orderDetails.inventoryId)
+    val qty = inventoryManager.getQuantity(orderDetails.item, orderDetails.inventoryId)
     conn.close()
-    modifyQuantity(orderDetails.item, qty + orderDetails.qty, orderDetails.inventoryId)
+    inventoryManager.modifyQuantity(orderDetails.item, qty + orderDetails.quantity, orderDetails.inventoryId)
   }
 }
-
-case class Order(orderID: Int, item: String, qty: Int, inventoryId: Int)

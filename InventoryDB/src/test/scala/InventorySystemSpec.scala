@@ -1,7 +1,8 @@
+package inventory.db
 
 import org.scalatest._
 
-class InventoryManagerSpec extends FunSuite with Matchers with BeforeAndAfterAll {
+class InventorySystemSpec extends FunSuite with Matchers with BeforeAndAfterAll {
 
   val inv = new InventorySystem
 
@@ -42,7 +43,7 @@ class InventoryManagerSpec extends FunSuite with Matchers with BeforeAndAfterAll
 
 
   override def afterAll = {
-    val ds = Utils.getDataSource
+    val ds = DataSourceUtils.getDataSource
     val stm1 = ds.getConnection.createStatement()
     val sql1 = "truncate items"
     val sql2 = "truncate inventory_info"
