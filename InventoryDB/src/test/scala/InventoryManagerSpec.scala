@@ -1,11 +1,11 @@
 package inventory.db
 
-import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers, FunSuite}
+import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers, FunSuite}
 
-class InventoryManagerSpec extends FlatSpec with Matchers with BeforeAndAfter {
+class InventoryManagerSpec extends FlatSpec with Matchers with BeforeAndAfterAll {
   val inventorySystem = new InventorySystem
 
-  before {
+  override def beforeAll {
     val ds = DataSourceUtils.getDataSource
     val stm1 = ds.getConnection.createStatement()
     val sql1 = "truncate items"
@@ -17,7 +17,6 @@ class InventoryManagerSpec extends FlatSpec with Matchers with BeforeAndAfter {
     stm1.addBatch(sql3)
     stm1.addBatch(sql4)
     stm1.executeBatch()
-
   }
 
   "Inventory Manager" should " add items" in {

@@ -2,6 +2,8 @@ package inventory.db
 
 import java.util
 
+import scala.collection.mutable.ListBuffer
+
 class InventoryManager extends inventory.core.InventoryManager {
   private val dataSource = DataSourceUtils.getDataSource
 
@@ -71,13 +73,13 @@ class InventoryManager extends inventory.core.InventoryManager {
   }
 
 
-  def getItemList: util.ArrayList[String] = {
+  def getItemList: ListBuffer[String] = {
     val conn = dataSource.getConnection
     val stmt = conn.prepareStatement("select item_name from items order by item_name;")
     val rs = stmt.executeQuery()
-    val itemList = new util.ArrayList[String]
+    val itemList = new ListBuffer[String]
     while (rs.next()) {
-      itemList.add(rs.getString("item_name"))
+      itemList += rs.getString("item_name")
     }
     conn.close()
     itemList
