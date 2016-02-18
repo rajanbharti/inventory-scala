@@ -7,16 +7,11 @@ version := "1.0"
 
 scalaVersion := "2.11.7"
 
-parallelExecution in ThisBuild := false
-
-parallelExecution in Test := false
-
-
 lazy val root = project.in(file(".")).aggregate(core, inMemory, inDB)
 
-lazy val core = project.in(file("core"))
+lazy val core = project.in(file("core")).settings(commonSettings: _*)
 
-lazy val inMemory = project.in(file("inventoryMem")).dependsOn(core)
+lazy val inMemory = project.in(file("inventoryMem")).dependsOn(core).settings(commonSettings: _*)
 
 lazy val inDB = project.in(file("InventoryDB")).dependsOn(core).settings(commonSettings: _*).settings(
   name := "inventory-db",

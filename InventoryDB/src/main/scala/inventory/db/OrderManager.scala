@@ -2,7 +2,7 @@ package inventory.db
 
 import inventory.core.Order
 
-trait OrderManager {
+trait OrderManager extends inventory.core.OrderManager {
   private val dataSource = DataSourceUtils.getDataSource
 
   def inventoryManager = new InventoryManager
@@ -31,9 +31,9 @@ trait OrderManager {
     orderDetails.next()
     val qty = orderDetails.getInt("qty")
     val itemName = orderDetails.getString("item")
-    val inventory_id = orderDetails.getInt("inv_id")
+    val inventoryId = orderDetails.getInt("inv_id")
     conn.close()
-    new Order(orderId, itemName, qty, inventory_id)
+    new Order(itemName, qty, inventoryId)
   }
 
   def cancelOrder(orderId: Int) = {

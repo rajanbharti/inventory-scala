@@ -3,6 +3,8 @@ package inventory.memory
 import java.util
 import inventory.core._
 
+import scala.collection.mutable.ListBuffer
+
 class InventoryManager extends inventory.core.InventoryManager {
 
   override def addItemToInventory(item: String, quantity: Int, inventoryId: Int): Unit = {
@@ -40,11 +42,9 @@ class InventoryManager extends inventory.core.InventoryManager {
     InMemoryInventory.inventoryInfo.size
   }
 
-  override def getItemList: util.ArrayList[String] = {
-    val itemList = new util.ArrayList[String]
-    for (i <- 0 until InMemoryInventory.items.size) {
-      itemList.add(InMemoryInventory.items.get(i).get)
-    }
+  override def getItemList: ListBuffer[String] = {
+    val itemList = new ListBuffer[String]
+    InMemoryInventory.items.foreach(x => itemList += InMemoryInventory.items.get(x._1).get)
     itemList
   }
 

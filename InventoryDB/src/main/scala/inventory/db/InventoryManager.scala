@@ -2,7 +2,7 @@ package inventory.db
 
 import java.util
 
-class InventoryManager {
+class InventoryManager extends inventory.core.InventoryManager {
   private val dataSource = DataSourceUtils.getDataSource
 
   def addItemToInventory(item: String, quantity: Int, inventoryId: Int) = {

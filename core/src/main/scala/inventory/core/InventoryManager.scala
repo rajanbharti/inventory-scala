@@ -2,6 +2,8 @@ package inventory.core
 
 import java.util
 
+import scala.collection.mutable.ListBuffer
+
 abstract class InventoryManager {
 
   def addItemToInventory(item: String, quantity: Int, inventoryId: Int)
@@ -18,7 +20,7 @@ abstract class InventoryManager {
   def itemCount(): Int
 
 
-  def getItemList: util.ArrayList[String]
+  def getItemList: ListBuffer[String]
 
   def addInventory(inventoryName: String, location: String)
 

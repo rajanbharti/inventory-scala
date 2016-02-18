@@ -2,42 +2,10 @@ package inventory.db
 
 import org.scalatest._
 
-class InventorySystemSpec extends FunSuite with Matchers with BeforeAndAfterAll {
+class InventorySystemSpec extends Suites with BeforeAndAfterAll {
 
-  val inv = new InventorySystem
-
-  test("add item") {
-    inv.addNewItem("pen")
-    inv.addNewItem("pencil")
-    inv.itemCount() should be(2)
-  }
-
-  test("add inventory") {
-    inv.addInventory("hyd", "hyd")
-    inv.addInventory("blr", "blr")
-    inv.addInventory("hyd1", "hyd")
-    inv.inventoriesCount should be(3)
-  }
-
-  test("add items to inventory") {
-    inv.addItemToInventory("pen", 40, 1)
-    inv.getQuantity("pen", 1) should be(40)
-  }
-
-  test("add quantity") {
-    inv.addQuantity("pen", 20, 1)
-    inv.getQuantity("pen", 1) should be(60)
-  }
-
-  test("place order") {
-    inv.placeOrder("pen", 1, 10)
-    inv.getQuantity("pen", 1) should be(50)
-  }
-
-  test("cancel order") {
-    inv.cancelOrder(1)
-    inv.getQuantity("pen", 1) should be(60)
-  }
+  new InventoryManagerSpec
+  new OrderManagerSpec
 
   override def afterAll() = {
     val ds = DataSourceUtils.getDataSource
