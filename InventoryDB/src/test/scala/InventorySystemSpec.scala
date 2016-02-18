@@ -12,7 +12,6 @@ class InventorySystemSpec extends FunSuite with Matchers with BeforeAndAfterAll 
     inv.itemCount() should be(2)
   }
 
-
   test("add inventory") {
     inv.addInventory("hyd", "hyd")
     inv.addInventory("blr", "blr")
@@ -33,7 +32,6 @@ class InventorySystemSpec extends FunSuite with Matchers with BeforeAndAfterAll 
   test("place order") {
     inv.placeOrder("pen", 1, 10)
     inv.getQuantity("pen", 1) should be(50)
-
   }
 
   test("cancel order") {
@@ -41,8 +39,7 @@ class InventorySystemSpec extends FunSuite with Matchers with BeforeAndAfterAll 
     inv.getQuantity("pen", 1) should be(60)
   }
 
-
-  override def afterAll = {
+  override def afterAll() = {
     val ds = DataSourceUtils.getDataSource
     val stm1 = ds.getConnection.createStatement()
     val sql1 = "truncate items"
